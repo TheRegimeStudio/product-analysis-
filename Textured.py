@@ -102,22 +102,3 @@ for i in range(len(list) + 1):
     df = df.append(temp_df)  # appends to master dataframe
 print(df)
 driver.close()
-
-
-
-#%%
-xpath2 = ('//*[@data-test="product-title"]')
-product = driver.find_element_by_xpath(xpath2)
-product.click()
-time.sleep(10)
-
-xpath3 = ('//*[@data-test="tabDrugFacts"]')
-drug_facts = driver.find_element_by_xpath(xpath3)
-drug_facts.click()
-time.sleep(5)
-
-ingredients = driver.find_element_by_xpath("//*[@class='h-text-transform-caps']").text
-print(ingredients)
-
-driver.get(url)
-
