@@ -4,56 +4,49 @@
 *This document details the purpose, methodology, and application of data science within the Beauty Recommendation system. Section 1 outlines the business objective addressed by the data science work, and defines the scope of the effort. Section 2 describes the data collected and utilized during analysis. Sections 3, 4, and 5 detail the methodologies employed, why they were selected, and how they are used and tuned (Section 4), trained (Section 5), and tested (Section 6). Finally, an interactive visualization with Bokeh *
 <br>
 
-## ***1. Textured Hair: Users are spread thin with trying to figure out which products work for them.***
+## ***1. Textured Hair: Users are having a hard time finding products that work.***
 
-The consumers in the natural hair care industry relies on users ratings and reviews on products all over the US. Additionally, these consumers focus on the reviews from users who are similar to them. 
+For the longest time, textured hair people have been underrepresented, so there was not understanding of hair hair. Just had to use what was available. The natural hair movement startin ~ 2008 brought to light the need and demand for products that caters to textured hair. 
 
-We will use the real time data set with various features a user would look into regarding a hair product (ie. ingredients, hair type, reviews, sentiments, ratings). We will be considering widely used products in the natural hair community.
+Since then, there have been plethora or products on the market for JUST textured hair. This ranges from shampoo, condition, styling gel, co-wash. Some products we didnt even know we need! Well the issue now is that we dont know what will work for us :thinking:. We are not one size fits all. It's becoming difficult when trying new products; it's a lot of research from social media, friends and family and in the case where it doesnt work <this happens a lot> we have now wasted a lot of time and money. 
 
-The basic idea of analyzing this dataset is to get a fair idea about the factors affecting the products of different brands in the market, aggregate ratings of each brand. The average brand has over 10 products serving the US market.
+I know many of you can relate to this experience but for us textured people, this is new territory for us. But we can do something about it! We know that the products we use have everything to do with chemistry and the compounds that make up this product. You have heard it before, - and if you haven't - newsflash! there are some terrible compounds in our products that doesnt work well for our hair. For some of us we might be allergic to some of ingredients. But we aren't all chemist and sometimes ***ain't no body got time*** to analyze every bottle :woozy_face:.
 
-With new products coming to the market every day, the industry is saturated. In spite of increasing demand for hair products, users are having a difficult time finding the right one. With such an overwhelming demand of hair products it has become important to study the hair parameters in connection with products on the market.
-What kind of products are more popular for a specific hair type. Do the entire 4c - fine hair hair community love light products? If yes, then are these products being widely used by 4c - hair naturals? These kind of analysis can be done using the data, by studying the factors such as:
-<br>
 
-* Ingredients
+***A user will go to this dashboard for information on products they will like to try based on like ingredients, saving them time and money***
 
-* Approx Price of product
 
-* Is a particular brand famous for its own kind of product
-
-* Brands that sells eco-friendly products
 <br/>
+
+# No need to worry, I decided to build a simple recommendation system :wink:
 
 ## ***2. Data: Perform extensive Exploratory Data Analysis(EDA) on Dataset.***
 
 **Phase 1**
 
-* Option 1: Scrape from brands website  
-* Option 2: Find a company that sell these brand, ie target 
+First thing! We need data... The issue is, because textured hair has been underrepresented, there isn't any available data. So we have to web=scrape. We will be scraping target because they have this pre classification mechanism and more access to data type and products. 
+
+
+* Currently, www.target.com and www.sallybeauty.com is the only platform that has segmentation for textured hair   
 
 **Phase 2**
 
-Data wrangling: The recorded data for each brand and each category should be read and data for each brand should be scraped individually. How many  variables were scraped in this phase? 
+* **Applied skills:** Web scraping with Selenium. Text mining and word embedding. Natural Language Processing. Content-based Recommendation Filtering using Cosine similarities of chemical compositions. Interactive Visualization/dashboard.
+
+
+Data wrangling: The recorded data for each brand and each category should be read and data for each brand should be scraped individually.
+
+* Categories to consider: Brand, name, ingredients, beauty purpose
 <br/>
 
 ## ***3. Visualization***
 
 **Key insights found**
 
-* Popular brands in the market
-
-* Sentiment analysis
-
-* Whether brand  recommend products based on hair type
-
-* Ratings distributions (histogram) - what are the insights
+* Clustering and classification
 
 * Type of products
 
-* Distribution of cost of products  
-
-* Most liked product type ( conditioner, shampoo) - See what people spend most of their money on.
 <br/>
 
 ## ***4. Modeling: Train***
