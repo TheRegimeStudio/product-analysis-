@@ -27,7 +27,7 @@ I know many of you can relate to this experience but for us textured people, thi
 First thing! We need data... The issue is, because textured hair has been underrepresented, there isn't any available data. So we have to web=scrape. We will be scraping target because they have this pre classification mechanism and more access to data type and products. 
 
 
-* Currently, www.target.com and www.sallybeauty.com is the only platform that has segmentation for textured hair   
+* Currently, www.target.com and www.sallybeauty.com are the only platform that have segmentation for textured hair   
 
 **Phase 2**
 
