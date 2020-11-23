@@ -1,13 +1,15 @@
-#%% md
+# %%
+"""
+Created on Sat Nov 22 3:55 PM 2020
+@author: Yan Lawrence
 
-### Go to Url : ' https://www.target.com/c/textured-hair-care/-/N-4rsrf '
-### Click the first product's title
-### On the next page find where it says 'drug facts' and click
-### Scrape 'Inactive Ingredients' body
-#%%
+"""
+# %%
 import time
 import re
-
+import operator
+from functools import reduce
+import numpy as np
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -18,17 +20,16 @@ from selenium.webdriver.support import expected_conditions as EC, expected_condi
 import pandas as pd
 import csv
 
-
-#%%
-
-
+# %%
 
 driver_path = '/Users/Yan/Downloads/chromedriver'
 driver = webdriver.Chrome(executable_path=driver_path)
 
-df = pd.DataFrame(columns=['Brand', 'Name', 'Beauty_Purpose', 'Product_Form', 'Ingredients','Label', 'URL']) # creates master dataframe
+df = pd.DataFrame(
+    columns=['Links', 'Brand', 'Name', 'Ingredients'])
 
-def scrollDown(driver, n_scroll):
+
+def scrollDown(driver, n_scroll):  # we wants to scroll function
     body = driver.find_element_by_tag_name("body")
     while n_scroll >= 0:
         body.send_keys(Keys.PAGE_DOWN)
@@ -36,69 +37,96 @@ def scrollDown(driver, n_scroll):
     return driver
 
 
+# %%#
 
-url = 'https://www.target.com/c/textured-hair-care/leave-in-conditioners/-/N-4rsrfZcrx6h?type=products&Nao='
-driver.get(url)
-time.sleep(10)
+## function to get all the product pages from each category
 
-browser = scrollDown(driver, 5)
-time.sleep(5)
+def num_pages():
+    pages = []
+    category = [
+        [f'https://www.target.com/c/textured-hair-care/leave-in-conditioners/-/N-4rsrfZcrx6h?type=products&Nao={i * 24}'
+         for i in range(0, 3)],
+        ['https://www.target.com/c/textured-hair-care/deep-conditioners/-/N-4rsrfZtq8xq?type=products&Nao=0'],
+        [f'https://www.target.com/c/textured-hair-care/hair-shampoos/-/N-4rsrfZlga4c?type=products&Nao={i * 24}' for i
+         in
+         range(0, 4)],
+        [f'https://www.target.com/c/textured-hair-care/hair-gels/-/N-4rsrfZ3e8i8?type=products&Nao={i * 24}' for i in
+         range(0, 4)],
+        [f'https://www.target.com/c/textured-hair-care/curl-enhancers/-/N-4rsrfZ1g47h?type=products&Nao={i * 24}' for i
+         in range(0, 3)],
+        ['https://www.target.com/c/textured-hair-care/co-washes/-/N-4rsrfZao1w6?type=products&Nao=0']]
 
-browser = scrollDown(driver, 5)
-time.sleep(5)
-
-browser = scrollDown(driver, 5)
-time.sleep(5)
-
-browser = scrollDown(driver, 5)
-time.sleep(5)
-
-driver.execute_script("window.scrollTo(0, document.body.scrollHeight= 23452)")  # 23452 - page height
-time.sleep(10)
+    for links in category:
+        pages.append(links)
+    return (pages)
 
 
+func = num_pages()
+# print(func)
+newlist = reduce(operator.add, func)
 
-#%%
-##code works to click  different pages
+# function to get all the hrefs from each page of the pages in [newList]
 
-def links_list():
-    links = []
+for x in newlist:
+    driver.get(x)
+
+    browser = scrollDown(driver, 5)
+    time.sleep(2)
+
+    browser = scrollDown(driver, 5)
+    time.sleep(2)
+
+    browser = scrollDown(driver, 5)
+    time.sleep(2)
+
+    browser = scrollDown(driver, 5)
+    time.sleep(2)
+
+    browser = scrollDown(driver, 5)
+    time.sleep(2)
+
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight= 23452)")  # 23452 - page height
+    time.sleep(2)
+
+    get_links = []
     xpath = ('//*[@class="Row-uds8za-0 fMpYji h-padding-t-tight"]')
     elems = driver.find_elements_by_xpath('//*[@data-test="product-title"]')
 
     for elem in elems:
-        href = elem.get_attribute('href')
-        links.append(href)
+        href = str(elem.get_attribute('href'))
+        get_links.append(href)
         if href is None:
             print(None)
-    return links
- list = links_list()
-print (list)
 
+    # print (len(get_links))
+    # print(get_links)
 
-for i in range(len(list) + 1):
-    url = list[i]
-    driver.get(url)
-    time.sleep(5)
+    # for each of the hrefs click and get the ingredients, brand and name
+    for url in get_links:
+        driver.get(url)
+        time.sleep(5)
 
-    Brand = driver.find_element_by_xpath('//*[@data-test="product-title"]').text
-    Name = driver.find_element_by_xpath('//*[@class="Link-sc-1khjl8b-0 gMFbJt"]').text[9:]
+        # brand and Name
+        Brand = driver.find_element_by_xpath('//*[@class="Link-sc-1khjl8b-0 gMFbJt"]').text[9:]
+        Name = driver.find_element_by_xpath('//*[@data-test="product-title"]').text
 
+        # print (Brand,Name)
+        browser = scrollDown(driver, 2)
+        time.sleep(5)
 
-#everything works above
+        # ingredients
+        try:
+            Ingredients = driver.find_element_by_xpath('//a[@data-test="tabDrugFacts"]')
+            Ingredients.click()
+            time.sleep(5)
+            Ingredients = driver.find_element_by_xpath("//*[@class='h-text-transform-caps']").text
+        except NoSuchElementException:
+            Ingredients = 'No Info'
+            time.sleep(5)
+        df2 = pd.DataFrame([[x, Brand, Name, Ingredients]], columns=['Links', 'Brand', 'Name', 'Ingredients'])
+        df = df.append(df2, ignore_index=True)
 
-    #print(Brand,Name)
-
-    brands_list = []
-    for b in range(len(Brand)):
-        brands_list.append(Brand[b])
-
-    name_list = []
-    for n in range(len(Name)):
-        name_list.append(Name[n])
-
-    data_tuples = list(zip(brands_list[1:], name_list[1:]))  # list of each brand name and product's name paired together
-    temp_df = pd.DataFrame(data_tuples, columns=['Brand', 'Name'])  # creates dataframe of each tuple in list
-    df = df.append(temp_df)  # appends to master dataframe
-print(df)
+df.to_csv('textured-hair.csv', encoding='utf-8-sig', index=False)
 driver.close()
+
+# %%
